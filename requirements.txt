@@ -1,0 +1,4 @@
+flask>=3.0
+gmsh>=4.0
+matplotlib>=3.5
+numpy>=1.20

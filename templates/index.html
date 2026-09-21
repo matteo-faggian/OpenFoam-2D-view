@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenFOAM 2D - Web GUI</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+<body>
+
+<!-- ===== TOOLBAR ===== -->
+<div id="toolbar">
+    <div class="toolbar-brand">
+        <span class="brand-open">Open</span><span class="brand-foam">FOAM</span><span class="brand-reg">&reg;</span>
+    </div>
+    <div class="toolbar-buttons">
+        <button class="tb-btn" id="btn-new" title="Nuovo Caso">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+            <span>Nuovo Caso</span>
+        </button>
+        <button class="tb-btn" id="btn-open" title="Apri Caso">
+            <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Apri</span>
+        </button>
+        <button class="tb-btn" id="btn-save" title="Salva">
+            <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <span>Salva</span>
+        </button>
+        <div class="tb-separator"></div>
+        <button class="tb-btn" id="btn-mesh" title="Genera Mesh">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Mesh</span>
+        </button>
+        <button class="tb-btn" id="btn-setup" title="Imposta Caso">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Imposta</span>
+        </button>
+        <div class="tb-separator"></div>
+        <button class="tb-btn tb-primary" id="btn-simulate" title="Avvia Simulazione">
+            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span>Simula</span>
+        </button>
+        <button class="tb-btn" id="btn-stop" title="Arresta">
+            <svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            <span>Arresta</span>
+        </button>
+        <div class="tb-separator"></div>
+        <button class="tb-btn" id="btn-residuals" title="Grafico Residui">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span>Residui</span>
+        </button>
+        <button class="tb-btn" id="btn-paraview" title="Visualizza in ParaView">
+            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            <span>ParaView</span>
+        </button>
+        <div class="tb-separator"></div>
+        <!-- 2D / 3D switch -->
+        <div class="mode-switch" title="Cambia modalità geometria">
+            <button id="btn-mode-2d" class="mode-btn active" data-mode="2d">2D</button>
+            <button id="btn-mode-3d" class="mode-btn" data-mode="3d">3D</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MAIN LAYOUT ===== -->
+<div id="main-container">
+    <!-- LEFT PANEL: Settings -->
+    <div id="left-panel">
+        <div class="panel-header">
+            <h2>Impostazioni Caso</h2>
+            <span id="case-name-display" class="case-badge">Nessun caso</span>
+        </div>
+        <div class="panel-body" id="settings-body">
+
+            <!-- Sistema -->
+            <div class="section">
+                <div class="section-header" data-target="sec-sistema">
+                    <span class="arrow">&#9660;</span> Sistema
+                </div>
+                <div class="section-content" id="sec-sistema">
+                    <label>solver</label>
+                    <select id="set-solver">
+                        <option value="rhoSimpleFoam">rhoSimpleFoam (steady)</option>
+                        <option value="rhoPimpleFoam">rhoPimpleFoam (transient)</option>
+                        <option value="rhoCentralFoam">rhoCentralFoam (supersonic)</option>
+                        <option value="sonicFoam">sonicFoam</option>
+                        <option value="simpleFoam">simpleFoam (incompressible)</option>
+                    </select>
+                    <small class="hint" id="hint-solver">Scegli il solver in base al regime di flusso</small>
+                    <label>endTime</label>
+                    <input type="number" id="set-endTime" value="1000">
+                    <small class="hint" id="hint-endTime">Iterazioni (steady): 500–2000</small>
+                    <label>deltaT</label>
+                    <input type="number" id="set-deltaT" value="1" step="0.001">
+                    <small class="hint" id="hint-deltaT">Passo iterazione: lascia 1</small>
+                    <label>writeInterval</label>
+                    <input type="number" id="set-writeInterval" value="100">
+                    <small class="hint" id="hint-writeInterval">Ogni N iterazioni (50–200)</small>
+                    <label style="margin-top:14px;">
+                        <input type="checkbox" id="set-parallel" style="width:auto;margin-right:6px;vertical-align:middle;">
+                        Esecuzione parallela (MS-MPI)
+                    </label>
+                    <small class="hint">Distribuisce il calcolo su N processi. Consigliato per mesh &gt;50k celle.</small>
+                    <label>Numero processi</label>
+                    <input type="number" id="set-nProcs" value="8" min="2" max="32" step="1">
+                    <small class="hint">i9-14900K: 8 (un P-core ciascuno). Più di 8 = E-core, di solito peggiora.</small>
+                </div>
+            </div>
+
+            <!-- Animazione ParaView -->
+            <div class="section">
+                <div class="section-header" data-target="sec-anim">
+                    <span class="arrow">&#9660;</span> Animazione ParaView
+                </div>
+                <div class="section-content" id="sec-anim">
+                    <small class="hint">Calcola automaticamente <code>writeInterval</code> per un video fluido di durata e frame rate desiderati.</small>
+                    <label>Durata video [s]</label>
+                    <input type="number" id="set-video-duration" value="10" min="1" step="1">
+                    <small class="hint">Lunghezza del video finale che genererai con ParaView.</small>
+                    <label>Frame rate [fps]</label>
+                    <input type="number" id="set-video-fps" value="24" min="1" max="60" step="1">
+                    <small class="hint">24 = cinema, 30 = standard, 60 = ultra-fluido.</small>
+                    <label>Timestep da salvare</label>
+                    <input type="number" id="set-video-saves" value="50" min="10" step="5">
+                    <small class="hint">30–60 e' abbastanza: ParaView interpola tra timestep.</small>
+                    <div style="margin-top:8px; padding:8px; background:#f5f5f5; border-left:3px solid #00897b; font-size:12px;">
+                        <div><b>writeInterval calcolato:</b> <span id="anim-writeInterval-calc">—</span></div>
+                        <div style="color:#666; margin-top:4px;" id="anim-explanation">—</div>
+                    </div>
+                    <button id="btn-apply-anim" style="margin-top:8px; width:100%;">Applica al writeInterval</button>
+                </div>
+            </div>
+
+            <!-- Modelli Fisici -->
+            <div class="section">
+                <div class="section-header" data-target="sec-physics">
+                    <span class="arrow">&#9660;</span> Modelli Fisici
+                </div>
+                <div class="section-content" id="sec-physics">
+                    <label>turbulenceModel</label>
+                    <select id="set-turbModel">
+                        <option value="kOmegaSST">kOmegaSST</option>
+                        <option value="kEpsilon">kEpsilon</option>
+                        <option value="SpalartAllmaras">Spalart-Allmaras</option>
+                        <option value="laminar">Laminare</option>
+                    </select>
+                    <small class="hint">kOmegaSST per aerodinamica esterna, kEpsilon generico, laminar per Re&lt;2000</small>
+                </div>
+            </div>
+
+            <!-- Proprietà del Fluido -->
+            <div class="section">
+                <div class="section-header" data-target="sec-fluid">
+                    <span class="arrow">&#9660;</span> Proprietà del Fluido
+                </div>
+                <div class="section-content" id="sec-fluid">
+                    <label>mu [Pa·s]</label>
+                    <input type="number" id="set-mu" value="1.7894e-05" step="any">
+                    <small class="hint">Aria 20°C: 1.79e-5 — Acqua: 1.0e-3</small>
+                    <label>Cp [J/(kg·K)]</label>
+                    <input type="number" id="set-Cp" value="1005" step="1">
+                    <small class="hint">Aria: 1005 — Acqua: 4186</small>
+                    <label>Pr</label>
+                    <input type="number" id="set-Pr" value="0.71" step="0.01">
+                    <small class="hint">Aria: 0.71 — Acqua: 7.0</small>
+                    <label>Peso molecolare [g/mol]</label>
+                    <input type="number" id="set-molWeight" value="28.97" step="0.01">
+                    <small class="hint">Aria: 28.97 — CO₂: 44.01 — N₂: 28.01</small>
+                </div>
+            </div>
+
+            <!-- Condizioni al Contorno -->
+            <div class="section">
+                <div class="section-header" data-target="sec-bc">
+                    <span class="arrow">&#9660;</span> Condizioni al Contorno
+                </div>
+                <div class="section-content" id="sec-bc">
+                    <div class="bc-group">
+                        <h4>Inlet</h4>
+                        <label>Ux [m/s]</label>
+                        <input type="number" id="set-inlet-Ux" value="30" step="0.1">
+                        <small class="hint" id="hint-inletUx">30–300 m/s (subsonico)</small>
+                        <label>Uy [m/s]</label>
+                        <input type="number" id="set-inlet-Uy" value="0" step="0.1">
+                        <small class="hint">0 per flusso orizzontale; usa per AoA o vento laterale</small>
+                        <label>T [K]</label>
+                        <input type="number" id="set-inlet-T" value="300" step="1">
+                        <small class="hint">Standard: 288 (15°C) — 300 (27°C)</small>
+                    </div>
+                    <div class="bc-group">
+                        <h4>Outlet</h4>
+                        <label>p [Pa]</label>
+                        <input type="number" id="set-outlet-p" value="101325" step="100">
+                        <small class="hint" id="hint-outletP">Atm: 101325 Pa (incompressibile: lascia 0)</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modello 3D (solo in modalità 3D) -->
+            <div class="section section-3d-only" id="sec-3d-wrap" style="display:none;">
+                <div class="section-header" data-target="sec-3dmodel">
+                    <span class="arrow">&#9660;</span> Modello 3D (.stl)
+                </div>
+                <div class="section-content" id="sec-3dmodel">
+                    <div id="stl-dropzone" style="border:2px dashed #aaa; padding:14px; text-align:center; border-radius:6px; cursor:pointer; background:#fafafa;">
+                        <div style="font-size:24px; color:#888;">⬆</div>
+                        <div style="font-size:12px; color:#666; margin-top:4px;">
+                            Trascina qui un file <b>.stl</b><br>oppure clicca per scegliere
+                        </div>
+                    </div>
+                    <input type="file" id="stl-file-input" accept=".stl" style="display:none;">
+                    <div id="stl-status" style="margin-top:8px; font-size:11px; color:#888;">Nessun file caricato</div>
+                    <small class="hint">Il modello viene salvato in <code>constant/triSurface/model.stl</code> ed estruso con snappyHexMesh.</small>
+                </div>
+            </div>
+
+            <!-- Mesh -->
+            <div class="section">
+                <div class="section-header" data-target="sec-mesh">
+                    <span class="arrow">&#9660;</span> Mesh
+                </div>
+                <div class="section-content" id="sec-mesh">
+                    <label>Dimensione cella [m]</label>
+                    <input type="number" id="set-meshSize" value="0.05" step="0.005" min="0.001">
+                    <small class="hint">Primo test: 0.1–0.2 — Raffinato: 0.02–0.05</small>
+                    <label>Raffinamento bordi (1=fine, 2=grosso)</label>
+                    <input type="range" id="set-refinement" min="0.2" max="2" step="0.1" value="1.0">
+                    <span id="refinement-val">1.0</span>
+                    <small class="hint">&lt;1 = celle più fini sulla geometria</small>
+                    <label>Dominio xmin [m]</label>
+                    <input type="number" id="set-domain-xmin" value="-5" step="1">
+                    <small class="hint">Spazio a monte: -5 (5× corda)</small>
+                    <label>Dominio xmax [m]</label>
+                    <input type="number" id="set-domain-xmax" value="15" step="1">
+                    <small class="hint">Spazio a valle: 10–20 (per scia)</small>
+                    <label>Dominio ymin [m]</label>
+                    <input type="number" id="set-domain-ymin" value="-5" step="1">
+                    <small class="hint">Tipico: -5 (5× corda)</small>
+                    <label>Dominio ymax [m]</label>
+                    <input type="number" id="set-domain-ymax" value="5" step="1">
+                    <small class="hint">Tipico: +5 (5× corda)</small>
+                    <div class="section-3d-only" style="display:none;">
+                        <label>Dominio zmin [m]</label>
+                        <input type="number" id="set-domain-zmin" value="-5" step="1">
+                        <small class="hint">Solo 3D — sotto al modello</small>
+                        <label>Dominio zmax [m]</label>
+                        <input type="number" id="set-domain-zmax" value="5" step="1">
+                        <small class="hint">Solo 3D — sopra al modello</small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <button id="btn-apply" class="apply-btn">Applica</button>
+    </div>
+
+    <!-- RESIZE HANDLE -->
+    <div id="left-resize" class="resize-handle-v"></div>
+
+    <!-- CENTER AREA -->
+    <div id="center-area">
+        <!-- Canvas toolbar -->
+        <div id="canvas-toolbar">
+            <button class="ct-btn active" data-tool="select" title="Seleziona (V)">
+                <svg viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+            </button>
+            <button class="ct-btn" data-tool="line" title="Linea (L)">
+                <svg viewBox="0 0 24 24"><line x1="5" y1="19" x2="19" y2="5" stroke-width="2"/></svg>
+            </button>
+            <button class="ct-btn" data-tool="spline" title="Spline (S)">
+                <svg viewBox="0 0 24 24"><path d="M3 17c4-6 6-12 9-12s5 6 9 12" fill="none" stroke-width="2"/></svg>
+            </button>
+            <button class="ct-btn" data-tool="delete" title="Cancella (D)">
+                <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+            <div class="ct-sep"></div>
+            <button class="ct-btn" id="btn-clear-canvas" title="Cancella tutto">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </button>
+            <button class="ct-btn" id="btn-close-shape" title="Chiudi forma">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 22 20 2 20" fill="none" stroke-width="2"/></svg>
+            </button>
+            <div class="ct-sep"></div>
+            <label class="ct-label">Griglia:</label>
+            <input type="checkbox" id="chk-grid" checked>
+            <label class="ct-label">Snap:</label>
+            <input type="checkbox" id="chk-snap" checked>
+            <label class="ct-label">Scala 1:</label>
+            <input type="number" id="canvas-scale" value="100" min="1" max="1000" style="width:60px;"> px/m
+        </div>
+
+        <!-- Canvas -->
+        <div id="canvas-container">
+            <canvas id="fabric-canvas"></canvas>
+            <div id="canvas-coords">X: 0.00 Y: 0.00 m</div>
+        </div>
+
+        <!-- Tabs: Canvas / Residuals -->
+        <div id="center-tabs">
+            <button class="tab-btn active" data-tab="tab-canvas">Geometria</button>
+            <button class="tab-btn" data-tab="tab-residuals">Residui</button>
+            <button class="tab-btn" data-tab="tab-meshinfo">Info Mesh</button>
+        </div>
+
+        <!-- Residuals view (hidden by default) -->
+        <div id="tab-residuals" class="tab-content" style="display:none;">
+            <canvas id="residuals-chart" width="800" height="400"></canvas>
+        </div>
+        <div id="tab-meshinfo" class="tab-content" style="display:none;">
+            <pre id="mesh-info-text">Nessuna mesh generata.</pre>
+        </div>
+    </div>
+
+    <!-- BOTTOM RESIZE -->
+    <div id="bottom-resize" class="resize-handle-h"></div>
+
+    <!-- OUTPUT PANEL -->
+    <div id="output-panel">
+        <div class="output-header">
+            <span>Output</span>
+            <span id="solver-status" class="solver-status"></span>
+            <button id="btn-clear-output" class="small-btn">Pulisci</button>
+        </div>
+        <div id="progress-container" style="display:none;">
+            <div id="progress-bar"><div id="progress-fill"></div></div>
+            <div id="progress-label">In attesa...</div>
+        </div>
+        <pre id="log-output"></pre>
+    </div>
+</div>
+
+<!-- ===== MODAL: Open Case ===== -->
+<div id="modal-overlay" class="modal-overlay" style="display:none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="modal-title">Apri Caso</h3>
+            <button class="modal-close" id="modal-close">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+    </div>
+</div>
+
+<script src="/static/js/canvas2d.js"></script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>
