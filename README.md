@@ -139,3 +139,10 @@ cases/              # casi generati (non versionati)
 ## Autore
 
 Matteo Faggian - Ingegneria Aerospaziale, Universita' di Padova.
+
+## Licenza
+
+[MIT](LICENSE) - Copyright (c) 2026 Matteo Faggian.
+
+La licenza copre solo il codice di questo repository. OpenFOAM, gmsh e ParaView
+hanno licenze proprie (rispettivamente GPL-3.0, GPL-2.0 e BSD-3-Clause).
